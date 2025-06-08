@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.pjt.model.dao.FavoriteDao">
+
+    <insert id="insertFavorite">
+        INSERT IGNORE INTO user_favorite (user_id, video_no)
+        VALUES (#{userId}, #{videoNo});
+    </insert>
+
+    <delete id="deleteFavorite">
+        DELETE FROM user_favorite
+        WHERE user_id = #{userId} AND video_no = #{videoNo};
+    </delete>
+
+    <select id="selectFavoritesByUser" parameterType="string" resultType="com.ssafy.pjt.model.dto.Video">
+    SELECT v.*
+    FROM user_favorite uf
+    JOIN video v ON uf.video_no = v.video_no
+    WHERE uf.user_id = #{userId}
+</select>
+    
+
+
+</mapper>

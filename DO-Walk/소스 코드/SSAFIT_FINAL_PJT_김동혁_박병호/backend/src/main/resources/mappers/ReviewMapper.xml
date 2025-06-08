@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.pjt.model.dao.ReviewDao">
+
+
+	<!-- 전체 게시글 조회 -->
+	<select id="selectAllReview" resultType="com.ssafy.pjt.model.dto.Review">
+  SELECT
+    r.review_no AS reviewNo,
+    r.video_no AS videoNo,
+    r.writer_id AS writerId,
+    r.review_title AS title,
+    r.review_content AS content,
+    r.reg_date AS regDate,
+    u.user_name AS writer
+  FROM review r
+  JOIN user u ON r.writer_id = u.user_id
+  ORDER BY r.reg_date DESC
+</select>
+
+	<!-- 상세 게시글 조회 -->
+	<select id="selectReviewById" parameterType="int"
+		resultType="Review">
+		SELECT
+		r.review_no AS reviewNo,
+		r.video_no AS videoNo,
+		r.writer_id AS writerId,
+		r.review_title AS title,
+		r.review_content AS content,
+		r.reg_date AS
+		regDate,
+		u.user_name AS writer
+		FROM review r
+		JOIN user u ON r.writer_id = u.user_id
+		WHERE r.review_no = #{id}
+	</select>
+
+	<!-- 게시글 등록 -->
+<insert id="insertReview" parameterType="Review">
+  INSERT INTO review (
+    review_title,
+    review_content,
+    writer_id,
+    video_no,
+    reg_date
+  )
+  VALUES (
+    #{title},
+    #{content},
+    #{writerId},
+    #{videoNo},
+    NOW()
+  )
+</insert>
+
+
+	<!-- 게시글 삭제 -->
+	<delete id="deleteReview" parameterType="int">
+		DELETE FROM review
+		WHERE
+		review_no = #{id}
+	</delete>
+
+	<!-- 게시글 수정 -->
+	<update id="updateReview" parameterType="Review">
+		UPDATE review
+		SET
+		review_title = #{title},
+		review_content = #{content}
+		WHERE review_no =
+		#{reviewNo}
+	</update>
+
+	<select id="getReviewsByVideoNo" resultType="Review">
+		SELECT
+		r.review_no AS reviewNo,
+		r.video_no AS videoNo,
+		r.writer_id AS writerId,
+		r.review_title AS title,
+		r.review_content AS content,
+		r.reg_date AS
+		regDate,
+		u.user_name AS writer
+		FROM review r
+		JOIN user u ON r.writer_id = u.user_id
+		WHERE r.video_no = #{videoNo}
+		ORDER BY r.reg_date DESC
+	</select>
+
+</mapper>
